@@ -63,6 +63,48 @@ class SinglyLinkedList:
 
         new_node.next = run
 
+    def insert_after(self, new_data, existing_data):
+
+        run = self.headNode
+
+        while run.next is not None:
+
+            if run.data == existing_data:
+                break
+
+            run = run.next
+        else:
+            raise ValueError("Existing data not present under the list")
+
+        new_node = Node(new_data)
+        new_node.next = run.next
+        run.next = new_node
+
+    def length(self):
+
+        count = 0
+        run = self.headNode.next
+        while run is not None:
+            run = run.next
+            count += 1
+
+        return count
+
+    def remove_node(self, node_data):
+        run = self.headNode
+
+        while run.next is not None:
+
+            if run.next.data == node_data:
+                break
+
+            run = run.next
+        else:
+            raise ValueError("Data not found in the list")
+
+        current_Node = run.next
+        run.next = current_Node.next
+
     def showList(self, msg):
 
             if type(msg) != str:
@@ -103,6 +145,14 @@ def main():
 
     L.insert_before(456, 100)
     L.showList("Show after insert_before()")
+
+    L.insert_after(456, 100)
+    L.showList("Show after insert_after()")
+
+    print("Size of the linkedList :- ", L.length())
+
+    L.remove_node(10)
+    L.showList("Show after remove_node(100)")
     sys.exit(0)
 
 
