@@ -92,6 +92,20 @@ class bst:
 
         return run.data
 
+    def searchNode(self, root_node : bst_Node, data):
+        run = root_node
+
+        while run is not None:
+
+            if data == run.data:
+                break
+            elif data > run.data:
+                run = run.right
+            elif data < run.data:
+                run = run.left
+
+        return run
+
     def max(self) -> any:
         """
         @self : calling BST object
@@ -126,6 +140,64 @@ class bst:
 
         return False
 
+    def removeNode(self, data) -> None:
+        """
+        @self : calling BST node object
+        In this method will search and remove node from BST
+        :param data: Node data to be delete
+        :return: None
+        """
+        z = self.searchNode(self.root_node, data)
+        if z is None:
+            print("Removed element not found")
+
+        if z.left is None:
+
+            if z.parent is None:
+                self.root_node = z.right
+            if z.parent.left == z:
+                z.parent.left = z.right
+            else:
+                z.parent.right = z.right
+            if z.right is not None:
+                z.right.parent = z.parent
+        elif z.right is None:
+
+            if z.parent is None:
+                self.root_node = z.right
+            if z.parent.left == z:
+                z.parent.left = z.left
+            else:
+                z.parent.right = z.left
+            if z.left is not None:
+                z.left.parent = z.parent
+
+        elif z.left is not None and z.right is not None:
+            y =  z.right
+            while y.left is not None:
+                y = y.left
+
+            if y != z.right:
+                y.parent.left = y.right
+                if y.right is not None:
+                    y.right.parent = y.parent
+
+                y.right = z.right
+                y.right.parent = y
+
+            y.left = z.left
+            y.left.parent = y
+
+            if z.parent is None:
+                self.root_node = y
+            elif z is z.parent.left:
+                z.parent.left = y
+            else:
+                z.parent.right = y
+
+            y.parent = z.parent
+
+
     def inorder(self) -> None:
         """
         @self : calling BST object
@@ -157,15 +229,12 @@ class bst:
         print("[End]")
 
 def main():
-
     L = [10,69,200,42,66,
          57,39,20,200,80,
          444,4.7,89,700]
 
-    # BST object
     T = bst()
 
-    # Insert elements
     for elm in L:
         T.insert(elm)
 
@@ -174,7 +243,6 @@ def main():
     print("Maximum Element From Tree :- ", T.max())
     print("Check Valid 89 Is Present Tn The Tree :- ", T.search(89))
     print("Check Invalid 10001 Is Present In The Tree :- ", T.search(10001))
-
     print("Inorder Traversal :- ", end="")
     T.inorder()
     print("Postorder Traversal :- ", end="")
@@ -182,5 +250,14 @@ def main():
     print("Preorder4 Traversal :- ", end="")
     T.preOrder()
 
+    print("Remove 39 element")
+    T.removeNode(39)
+    print("Inorder Traversal :- ", end="")
+    T.inorder()
+    print("Postorder Traversal :- ", end="")
+    T.postOrder()
+    print("Preorder4 Traversal :- ", end="")
+    T.preOrder()
 main()
+
 
